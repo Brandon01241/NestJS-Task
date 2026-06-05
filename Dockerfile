@@ -21,4 +21,4 @@ RUN npm run build
 ENV NODE_ENV=production
 EXPOSE 3002
 
-CMD ["sh", "-c", "npx prisma migrate deploy && node dist/src/main.js"]
+CMD ["sh", "-c", "npx prisma migrate deploy && npx prisma db seed && node dist/src/main.js"]

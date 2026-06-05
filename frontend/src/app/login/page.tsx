@@ -62,7 +62,7 @@ export default function LoginPage() {
               />
             </Form.Item>
 
-            {error ? <Alert type="error" showIcon message={error} /> : null}
+            {error ? <Alert type="error" showIcon title={error} /> : null}
 
             <Button
               type="primary"

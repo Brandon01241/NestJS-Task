@@ -12,6 +12,11 @@ async function bootstrap() {
   const prisma = app.get(PrismaService);
   await prisma.enableShutdownHooks(app);
 
-  await app.listen(process.env.PORT ?? 3000);
+  const port = process.env.PORT ?? 3000;
+  await app.listen(port);
+  
+  if (process.env.NODE_ENV !== 'production') {
+    console.log(`\n\x1b[36m========================================\n\n   Frontend is running at: http://localhost:3000\n   Backend API is running at: http://localhost:${port}\n\n========================================\x1b[0m\n`);
+  }
 }
 bootstrap();

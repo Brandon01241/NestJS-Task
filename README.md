@@ -218,6 +218,13 @@ npx prisma migrate dev --name init
 執行成功後，Prisma 會在你的 MySQL 中建立好 `User` 資料表。
 
 ---
+### 4.4 手動 Seed（本機開發）
+若你在本機開發，當你執行 `npx prisma migrate dev` 後，系統會**自動觸發** Seed 機制寫入初始資料。
+
+如果因為某些原因資料庫被清空，你也可以隨時手動執行：
+```bash
+npx prisma db seed
+```
 
 ## 5. 啟動專案（本機跑）
 
@@ -244,10 +251,22 @@ npm run start:dev
 
 ---
 
-## 6. 預設測試帳號（自動 Seed 50 筆資料）
+## 6. 預設測試帳號（Seed 50 筆資料）
 
-為了方便測試**分頁功能**與**權限控制**，當專案啟動且資料庫為空時，系統會自動寫入 **50 筆** 測試資料（包含 ADMIN 與 USER 角色）：
+為了方便測試**分頁功能**與**權限控制**，系統提供指令自動寫入 **50 筆** 測試資料（包含 ADMIN 與 USER 角色）。
 
+### 6.1 自動 Seed（使用 Docker Compose）
+若你使用 `docker compose up` 啟動，容器在建置時會自動執行 migration 與 seed，你不需要做任何事，資料庫就會有 50 筆測試資料。
+
+### 6.2 手動 Seed（本機開發）
+若你在本機開發，當你執行 `npx prisma migrate dev` 後，系統會**自動觸發** Seed 機制寫入初始資料。
+
+如果因為某些原因資料庫被清空，你也可以隨時手動執行：
+```bash
+npx prisma db seed
+```
+
+### 6.3 測試帳號清單
 - **主要測試帳號 1 (ADMIN)**
   - Email: `admin@example.com`
   - Password: `admin123`
@@ -322,8 +341,9 @@ npm run start:dev
 ## 9. 專案核心目錄結構
 
 - `prisma/schema.prisma`：定義 MySQL 資料表與欄位。
+- `prisma/seed.ts`：資料庫初始化腳本（建立 50 筆初始測試資料）。
+- `prisma.config.ts`：Prisma 7 的設定檔（包含 datasource url 與 seed 執行指令）。
 - `src/prisma/prisma.service.ts`：Prisma 連線服務（掛載 MariaDB Adapter）。
-- `src/prisma/prisma-seed.service.ts`：負責在服務啟動時，自動建立 50 筆初始測試資料。
 - `src/auth/`：登入邏輯、JWT 簽發與 Passport 驗證策略。
 - `src/users/`：查詢使用者、分頁處理與 RBAC (HKID 遮罩) 商業邏輯。
 - `src/common/roles.guard.ts`：用來判斷當前請求使用者身分的 Guard。

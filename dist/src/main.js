@@ -11,7 +11,11 @@ async function bootstrap() {
     app.useGlobalPipes(new common_1.ValidationPipe({ whitelist: true, transform: true }));
     const prisma = app.get(prisma_service_1.PrismaService);
     await prisma.enableShutdownHooks(app);
-    await app.listen(process.env.PORT ?? 3000);
+    const port = process.env.PORT ?? 3000;
+    await app.listen(port);
+    if (process.env.NODE_ENV !== 'production') {
+        console.log(`\n\x1b[36m========================================\n\n   Frontend is running at: http://localhost:3000\n   Backend API is running at: http://localhost:${port}\n\n========================================\x1b[0m\n`);
+    }
 }
 bootstrap();
 //# sourceMappingURL=main.js.map
